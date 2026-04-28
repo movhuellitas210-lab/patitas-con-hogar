@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patitas con Hogar — Adopta, no compres</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --terracota: #C4623A;
+    --terracota-light: #F0EBE3;
+    --terracota-dark: #8B3E21;
+    --mostaza: #D4A843;
+    --mostaza-light: #FDF6E3;
+    --menta: #4A8B6F;
+    --menta-light: #E8F4EE;
+    --azul: #3A6B8B;
+    --azul-light: #E8F0F7;
+    --crema: #FAF7F2;
+    --cafe-oscuro: #2C1810;
+    --cafe-medio: #5C3D2E;
+    --gris-calido: #6B6560;
+    --blanco: #FFFFFF;
+    --sombra: 0 4px 24px rgba(44,24,16,0.10);
+    --sombra-lg: 0 12px 40px rgba(44,24,16,0.14);
+    --radio: 16px;
+    --radio-sm: 8px;
+    --radio-xl: 32px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crema);
+    color: var(--cafe-oscuro);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+    line-height: 1.2;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  img { max-width: 100%; display: block; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(196,98,58,0.12);
+    padding: 0 2rem;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--terracota-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo span { font-size: 1.6rem; }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--cafe-medio);
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links a:hover { color: var(--terracota); }
+
+  .btn-nav {
+    background: var(--terracota);
+    color: white !important;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    transition: background 0.2s, transform 0.15s !important;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-nav:hover {
+    background: var(--terracota-dark) !important;
+    transform: translateY(-1px);
+  }
+
+  /* ─── HAMBURGER ─── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    background: none;
+    border: none;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 2px;
+    background: var(--cafe-medio);
+    border-radius: 2px;
+    transition: all 0.3s;
+    display: block;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    padding-top: 68px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-bg-shape {
+    position: absolute;
+    top: 0; right: 0;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(135deg, #F0EBE3 0%, #E8D5C4 100%);
+    z-index: 0;
+    border-radius: 0 0 0 120px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 3rem 4rem 5%;
+    max-width: 620px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--mostaza-light);
+    color: var(--terracota-dark);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(212,168,67,0.3);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--cafe-oscuro);
+    margin-bottom: 1.2rem;
+    line-height: 1.1;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--terracota);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--gris-calido);
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+    line-height: 1.8;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--terracota);
+    color: white;
+    padding: 15px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: var(--terracota-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(196,98,58,0.3);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cafe-medio);
+    padding: 15px 28px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 1rem;
+    border: 1.5px solid rgba(92,61,46,0.25);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--terracota);
+    color: var(--terracota);
+    transform: translateY(-2px);
+  }
+
+  .hero-image-wrap {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 4% 5rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hero-photo-card {
+    background: white;
+    border-radius: var(--radio-xl);
+    padding: 1rem;
+    box-shadow: var(--sombra-lg);
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+  }
+
+  .hero-photo-card img {
+    border-radius: var(--radio);
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+  }
+
+  .hero-photo-tag {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border-radius: 50px;
+    padding: 10px 24px;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .hero-photo-tag strong {
+    font-size: 0.9rem;
+    color: var(--cafe-oscuro);
+  }
+
+  .hero-photo-tag span {
+    font-size: 0.8rem;
+    color: var(--menta);
+    font-weight: 600;
+  }
+
+  .floating-stat {
+    position: absolute;
+    background: white;
+    border-radius: var(--radio);
+    padding: 14px 18px;
+    box-shadow: var(--sombra);
+    font-size: 0.85rem;
+  }
+
+  .floating-stat-1 {
+    top: 12%;
+    right: -20px;
+  }
+
+  .floating-stat-1 .num { font-size: 1.8rem; font-weight: 700; color: var(--terracota); font-family: 'Playfair Display', serif; }
+
+  .floating-stat-2 {
+    bottom: 22%;
+    left: -28px;
+  }
+
+  .floating-stat-2 .num { font-size: 1.5rem; font-weight: 700; color: var(--menta); font-family: 'Playfair Display', serif; }
+
+  /* ─── SECCIONES GENERALES ─── */
+  section { padding: 90px 5%; }
+
+  .section-label {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracota);
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: var(--cafe-oscuro);
+    max-width: 600px;
+  }
+
+  .section-sub {
+    color: var(--gris-calido);
+    max-width: 560px;
+    font-size: 1.05rem;
+    margin-bottom: 3rem;
+  }
+
+  /* ─── ADOPTAR VS COMPRAR ─── */
+  .vs-section {
+    background: var(--cafe-oscuro);
+    color: white;
+    border-radius: var(--radio-xl);
+    margin: 0 4%;
+    padding: 5rem 5%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .vs-section::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(196,98,58,0.12);
+  }
+
+  .vs-section .section-label { color: var(--mostaza); }
+  .vs-section .section-title { color: white; max-width: 100%; }
+
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .vs-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radio);
+    padding: 2rem;
+  }
+
+  .vs-card.bad { border-color: rgba(196,98,58,0.4); }
+  .vs-card.good { border-color: rgba(74,139,111,0.5); background: rgba(74,139,111,0.08); }
+
+  .vs-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .vs-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .vs-icon.bad { background: rgba(196,98,58,0.2); }
+  .vs-icon.good { background: rgba(74,139,111,0.2); }
+
+  .vs-card h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .vs-list { list-style: none; }
+
+  .vs-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.75);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .vs-list li:last-child { border-bottom: none; }
+
+  .vs-list li .mark {
+    margin-top: 3px;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+  }
+
+  .vs-cta-box {
+    margin-top: 3rem;
+    background: var(--terracota);
+    border-radius: var(--radio);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .vs-cta-box p { color: rgba(255,255,255,0.9); font-size: 1.05rem; max-width: 480px; }
+  .vs-cta-box strong { color: white; }
+
+  /* ─── ESTADÍSTICAS ─── */
+  .stats-section {
+    padding: 90px 5%;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: var(--radio);
+    padding: 2rem 1.8rem;
+    box-shadow: 0 2px 16px rgba(44,24,16,0.07);
+    border: 1px solid rgba(44,24,16,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+
+  .stat-card.t1::before { background: var(--terracota); }
+  .stat-card.t2::before { background: var(--mostaza); }
+  .stat-card.t3::before { background: var(--menta); }
+  .stat-card.t4::before { background: var(--azul); }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .t1 .stat-num { color: var(--terracota); }
+  .t2 .stat-num { color: var(--mostaza); }
+  .t3 .stat-num { color: var(--menta); }
+  .t4 .stat-num { color: var(--azul); }
+
+  .stat-label {
+    font-size: 0.95rem;
+    color: var(--gris-calido);
+    line-height: 1.5;
+  }
+
+  .stat-source {
+    font-size: 0.72rem;
+    color: rgba(107,101,96,0.6);
+    margin-top: 0.8rem;
+    font-style: italic;
+  }
+
+  .stats-text-block {
+    background: var(--terracota-light);
+    border-radius: var(--radio);
+    padding: 2.5rem;
+    border-left: 4px solid var(--terracota);
+    margin-top: 2rem;
+  }
+
+  .stats-text-block p {
+    font-size: 1.05rem;
+    color: var(--cafe-medio);
+    line-height: 1.8;
+  }
+
+  /* ─── BENEFICIOS ─── */
+  .benefits-section {
+    background: var(--menta-light);
+    margin: 0 4%;
+    border-radius: var(--radio-xl);
+    padding: 5rem 5%;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .benefit-card {
+    background: white;
+    border-radius: var(--radio);
+    padding: 2rem;
+    border: 1px solid rgba(74,139,111,0.15);
+  }
+
+  .benefit-icon {
+    width: 52px; height: 52px;
+    border-radius: var(--radio-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    background: var(--menta-light);
+  }
+
+  .benefit-card h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cafe-oscuro);
+    margin-bottom: 0.6rem;
+  }
+
+  .benefit-card p {
+    font-size: 0.92rem;
+    color: var(--gris-calido);
+    line-height: 1.6;
+  }
+
+  /* ─── RESPONSABILIDADES ─── */
+  .resp-section { padding: 90px 5%; }
+
+  .resp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+    align-items: start;
+  }
+
+  .resp-col h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cafe-oscuro);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--terracota-light);
+  }
+
+  .resp-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .resp-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--terracota-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .resp-text strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--cafe-oscuro);
+    margin-bottom: 2px;
+  }
+
+  .resp-text span {
+    font-size: 0.88rem;
+    color: var(--gris-calido);
+  }
+
+  /* ─── MUROS INTERACTIVOS ─── */
+  .walls-section { padding: 90px 5%; }
+
+  .walls-tabs {
+    display: flex;
+    gap: 0;
+    background: white;
+    border-radius: 50px;
+    padding: 6px;
+    box-shadow: inset 0 0 0 1px rgba(44,24,16,0.1);
+    width: fit-content;
+    margin-bottom: 3rem;
+  }
+
+  .wall-tab {
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--gris-calido);
+    transition: all 0.25s;
+  }
+
+  .wall-tab.active {
+    background: var(--terracota);
+    color: white;
+  }
+
+  .wall-panel { display: none; }
+  .wall-panel.active { display: block; }
+
+  .upload-form {
+    background: white;
+    border-radius: var(--radio-xl);
+    padding: 2.5rem;
+    box-shadow: 0 2px 20px rgba(44,24,16,0.07);
+    max-width: 620px;
+    border: 1px solid rgba(44,24,16,0.07);
+  }
+
+  .upload-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--cafe-oscuro);
+  }
+
+  .upload-form p {
+    color: var(--gris-calido);
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+
+  .form-group { margin-bottom: 1.2rem; }
+
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cafe-medio);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid rgba(44,24,16,0.15);
+    border-radius: var(--radio-sm);
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cafe-oscuro);
+    background: var(--crema);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--terracota);
+    background: white;
+  }
+
+  .form-group textarea { resize: vertical; min-height: 100px; }
+
+  .file-upload-area {
+    border: 2px dashed rgba(196,98,58,0.35);
+    border-radius: var(--radio);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--terracota-light);
+    position: relative;
+  }
+
+  .file-upload-area:hover {
+    border-color: var(--terracota);
+    background: rgba(240,235,227,0.8);
+  }
+
+  .file-upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0;
+    background: none;
+  }
+
+  .file-upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+  .file-upload-area p {
+    font-size: 0.88rem;
+    color: var(--terracota-dark);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .file-preview {
+    display: none;
+    margin-top: 1rem;
+    border-radius: var(--radio-sm);
+    overflow: hidden;
+    max-height: 200px;
+  }
+
+  .file-preview img { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radio-sm); }
+
+  .animal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .animal-card {
+    background: white;
+    border-radius: var(--radio);
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(44,24,16,0.08);
+    border: 1px solid rgba(44,24,16,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .animal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(44,24,16,0.12);
+  }
+
+  .animal-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .animal-card-body { padding: 1.2rem; }
+
+  .animal-card-body h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--cafe-oscuro);
+    margin-bottom: 4px;
+  }
+
+  .animal-location {
+    font-size: 0.8rem;
+    color: var(--terracota);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .animal-desc {
+    font-size: 0.85rem;
+    color: var(--gris-calido);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .animal-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 50px;
+    margin-bottom: 8px;
+  }
+
+  .badge-busca { background: #FEF3C7; color: #92400E; }
+  .badge-adoptado { background: var(--menta-light); color: var(--menta); }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--gris-calido);
+    width: 100%;
+  }
+
+  .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state p { font-size: 0.95rem; line-height: 1.7; }
+
+  .btn-delete {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1.5px solid rgba(196,98,58,0.3);
+    color: var(--terracota);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 10px;
+  }
+
+  .btn-delete:hover {
+    background: var(--terracota);
+    color: white;
+    border-color: var(--terracota);
+  }
+
+  .animal-phone {
+    font-size: 0.82rem;
+    color: var(--menta);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .animal-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(44,24,16,0.07);
+  }
+
+  /* Confirm dialog */
+  .confirm-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(44,24,16,0.55);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .confirm-backdrop.open { display: flex; }
+
+  .confirm-box {
+    background: white;
+    border-radius: var(--radio);
+    padding: 2rem;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--sombra-lg);
+  }
+
+  .confirm-box .icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+  .confirm-box h4 { font-family: 'DM Sans', sans-serif; font-size: 1.05rem; margin-bottom: 0.5rem; }
+  .confirm-box p { font-size: 0.9rem; color: var(--gris-calido); margin-bottom: 1.5rem; }
+
+  .confirm-actions { display: flex; gap: 0.8rem; justify-content: center; }
+
+  .btn-confirm-cancel {
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1.5px solid rgba(44,24,16,0.18);
+    background: transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--cafe-medio);
+    transition: all 0.2s;
+  }
+
+  .btn-confirm-cancel:hover { background: var(--crema); }
+
+  .btn-confirm-delete {
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none;
+    background: var(--terracota);
+    color: white;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .btn-confirm-delete:hover { background: var(--terracota-dark); }
+
+  .success-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .success-card {
+    border-radius: var(--radio);
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 1;
+    cursor: pointer;
+  }
+
+  .success-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+
+  .success-card:hover img { transform: scale(1.06); }
+
+  .success-card-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(44,24,16,0.85), transparent);
+    padding: 1.5rem 1rem 1rem;
+    color: white;
+  }
+
+  .success-card-overlay h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .success-card-overlay p {
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--cafe-oscuro);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-lg);
+    font-size: 0.9rem;
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    max-width: 320px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-left: 4px solid var(--menta); }
+  .toast.error { border-left: 4px solid var(--terracota); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--cafe-oscuro);
+    color: rgba(255,255,255,0.7);
+    padding: 4rem 5% 2rem;
+    margin-top: 4rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-brand .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+  }
+
+  .footer-brand p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    color: white;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.03em;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a { font-size: 0.88rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--terracota); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    font-size: 0.82rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom a { color: var(--mostaza); }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 68px; left: 0; right: 0;
+      background: var(--crema);
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(44,24,16,0.08);
+      gap: 1.2rem;
+      z-index: 99;
+    }
+
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: 88px;
+    }
+
+    .hero-bg-shape { display: none; }
+
+    .hero-content {
+      padding: 2rem 5%;
+      max-width: 100%;
+    }
+
+    .hero-image-wrap {
+      padding: 1rem 5% 3rem;
+    }
+
+    .hero-photo-card img { height: 260px; }
+
+    .floating-stat-1 { right: 0; top: 5%; }
+    .floating-stat-2 { left: 0; bottom: 15%; }
+
+    .vs-section { margin: 0; border-radius: 0; }
+    .vs-grid { grid-template-columns: 1fr; }
+
+    .resp-grid { grid-template-columns: 1fr; }
+
+    .benefits-section { margin: 0; border-radius: 0; }
+
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+
+    section { padding: 60px 5%; }
+  }
+
+  /* ─── ANIMACIONES ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.22s; }
+  .delay-3 { animation-delay: 0.34s; }
+  .delay-4 { animation-delay: 0.46s; }
+
+  /* ─── MODAL ─── */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(44,24,16,0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: var(--radio-xl);
+    padding: 2.5rem;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1.2rem; right: 1.2rem;
+    background: var(--crema);
+    border: none;
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gris-calido);
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: var(--terracota-light); }
+
+  /* scroll suave al nav */
+  .scroll-progress {
+    position: fixed;
+    top: 68px; left: 0;
+    height: 3px;
+    background: var(--terracota);
+    z-index: 99;
+    transition: width 0.1s;
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">
+    <span>🐾</span>
+    Patitas con Hogar
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#adoptar-vs-comprar">Adoptar vs. Comprar</a></li>
+    <li><a href="#estadisticas">Estadísticas</a></li>
+    <li><a href="#beneficios">Beneficios</a></li>
+    <li><a href="#responsabilidades">Preparación</a></li>
+    <li><a href="#muros" class="btn-nav">Ver animales</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg-shape"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge fade-up">🐶 Campaña de concientización animal</div>
+    <h1 class="fade-up delay-1">Adopta, no compres.<br>Salva una <em>vida</em>.</h1>
+    <p class="hero-sub fade-up delay-2">En México hay más de 16 millones de animales sin hogar. Cada adopción rompe el ciclo y da una segunda oportunidad. ¿Listo para cambiar una vida —y la tuya?</p>
+    <div class="hero-ctas fade-up delay-3">
+      <a href="#muros" class="btn-primary">Ver animales en adopción</a>
+      <a href="#adoptar-vs-comprar" class="btn-secondary">¿Por qué adoptar?</a>
+    </div>
+  </div>
+
+  <div class="hero-image-wrap fade-up delay-2">
+    <div class="hero-photo-card">
+      <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=500&q=80" alt="Perro adoptable feliz mirando a la cámara">
+      <div class="hero-photo-tag">
+        <span>🟢</span>
+        <strong>Coco, 2 años</strong>
+        <span>Buscando hogar</span>
+      </div>
+    </div>
+    <div class="floating-stat floating-stat-1">
+      <div class="num">70%</div>
+      <div style="font-size:0.78rem; color: var(--gris-calido); margin-top:2px;">viven en la calle</div>
+    </div>
+    <div class="floating-stat floating-stat-2">
+      <div class="num">23M+</div>
+      <div style="font-size:0.78rem; color: var(--gris-calido); margin-top:2px;">mascotas en México</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ADOPTAR VS COMPRAR ─── -->
+<div id="adoptar-vs-comprar">
+  <div class="vs-section">
+    <span class="section-label">La decisión importa</span>
+    <h2 class="section-title" style="color:white; font-size: clamp(1.8rem, 3vw, 2.6rem);">Adoptar vs. Comprar:<br>¿cuál es la diferencia real?</h2>
+    <p style="color:rgba(255,255,255,0.7); max-width:580px; margin-top:0.8rem;">No es solo un animal. Es una decisión que afecta a toda una cadena: al que compras, al que muere esperando, y a tu propia conciencia.</p>
+
+    <div class="vs-grid">
+      <div class="vs-card bad">
+        <div class="vs-card-header">
+          <div class="vs-icon bad">❌</div>
+          <h3>Comprar a un criador o tienda</h3>
+        </div>
+        <ul class="vs-list">
+          <li><span class="mark">🔴</span>Financia "fábricas de cachorros" donde animales son tratados como mercancía.</li>
+          <li><span class="mark">🔴</span>Fomenta la sobreproducción: por cada cachorro vendido, otro muere en la calle.</li>
+          <li><span class="mark">🔴</span>Los animales de crianza intensiva frecuentemente tienen problemas genéticos y de salud.</li>
+          <li><span class="mark">🔴</span>Costo muy elevado (entre $5,000 y $30,000 MXN o más) que no garantiza mejor compañía.</li>
+          <li><span class="mark">🔴</span>Refuerza la idea de que las mascotas son productos de consumo.</li>
+        </ul>
+      </div>
+      <div class="vs-card good">
+        <div class="vs-card-header">
+          <div class="vs-icon good">✅</div>
+          <h3>Adoptar de un refugio o rescate</h3>
+        </div>
+        <ul class="vs-list">
+          <li><span class="mark">🟢</span>Salvas una vida directamente: liberas espacio en el refugio para otro animal.</li>
+          <li><span class="mark">🟢</span>Los animales rescatados suelen venir esterilizados, vacunados y desparasitados.</li>
+          <li><span class="mark">🟢</span>Costo mínimo o simbólico (donativo de $200–$800 MXN) que apoya al refugio.</li>
+          <li><span class="mark">🟢</span>Los perros y gatos mestizos tienen mayor diversidad genética y suelen ser más sanos.</li>
+          <li><span class="mark">🟢</span>El vínculo con un animal rescatado es profundo: ellos también saben que los salvaste.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="vs-cta-box">
+      <p><strong>¿Sabías que en México hay refugios que cierran por falta de espacio?</strong> Mientras alguien paga miles por un cachorro, un animal adulto y sano espera años en una jaula — a veces sin poder salir.</p>
+      <a href="#muros" class="btn-primary" style="flex-shrink:0;">Ver animales en adopción</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ESTADÍSTICAS ─── -->
+<section class="stats-section" id="estadisticas">
+  <span class="section-label">México en números</span>
+  <h2 class="section-title">Una crisis silenciosa<br>en nuestras calles</h2>
+  <p class="section-sub">Los datos del INEGI y organizaciones de bienestar animal cuentan una realidad que no podemos ignorar.</p>
+
+  <div class="stats-grid">
+    <div class="stat-card t1">
+      <div class="stat-num">23M+</div>
+      <div class="stat-label">perros y gatos hay en México, según estimaciones del INEGI y la AMVAC.</div>
+      <div class="stat-source">Fuente: INEGI / AMVAC</div>
+    </div>
+    <div class="stat-card t2">
+      <div class="stat-num">70%</div>
+      <div class="stat-label">de esos animales viven en situación de calle o en abandono parcial, sin hogar estable.</div>
+      <div class="stat-source">Fuente: INEGI, Encuesta Nacional</div>
+    </div>
+    <div class="stat-card t3">
+      <div class="stat-num">#1</div>
+      <div class="stat-label">México ocupa el primer lugar en América Latina en número de perros callejeros.</div>
+      <div class="stat-source">Fuente: OPS / OMS Américas</div>
+    </div>
+    <div class="stat-card t4">
+      <div class="stat-num">80%</div>
+      <div class="stat-label">de los animales en refugios son esterilizados, lo que frena la sobrepoblación.</div>
+      <div class="stat-source">Fuente: Red Nacional de Refugios</div>
+    </div>
+  </div>
+
+  <div class="stats-text-block">
+    <p>Se estima que en México <strong>mueren más de 1 millón de perros al año</strong> por enfermedad, accidente o sacrificio en centros de control animal. La esterilización, la tenencia responsable y la adopción son las únicas herramientas reales para revertir esta cifra. Cada animal adoptado es un paso concreto hacia un cambio sistémico.</p>
+  </div>
+</section>
+
+<!-- ─── BENEFICIOS ─── -->
+<section id="beneficios" style="padding: 0 0 90px;">
+  <div class="benefits-section">
+    <span class="section-label">Ciencia y corazón</span>
+    <h2 class="section-title">Los beneficios de<br>tener una mascota adoptada</h2>
+    <p class="section-sub">Estudios en psicología y medicina lo confirman: adoptar no solo salva al animal, también te transforma a ti.</p>
+
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🧠</div>
+        <h3>Reducción del estrés y ansiedad</h3>
+        <p>Interactuar con una mascota reduce el cortisol (hormona del estrés) y aumenta la serotonina. 15 minutos de caricias ya producen cambios medibles.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">❤️</div>
+        <h3>Salud cardiovascular mejorada</h3>
+        <p>Dueños de mascotas tienen menor presión arterial y riesgo reducido de enfermedades cardíacas. Los paseos diarios hacen diferencia.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🤝</div>
+        <h3>Combate la soledad</h3>
+        <p>Las mascotas ofrecen compañía incondicional. Son especialmente benéficas para adultos mayores, personas que viven solas o con depresión.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">👨‍👩‍👧</div>
+        <h3>Desarrollo en niños y niñas</h3>
+        <p>Los niños que crecen con mascotas desarrollan mayor empatía, responsabilidad y resistencia a alergias. Aprenden el cuidado y el respeto por la vida.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🏃</div>
+        <h3>Mayor actividad física</h3>
+        <p>Los dueños de perros caminan en promedio 30 minutos más por día que quienes no tienen. Una mascota te motiva a salir y moverte.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">✨</div>
+        <h3>Bienestar moral y propósito</h3>
+        <p>Saber que rescataste una vida da un profundo sentido de propósito. La gratitud de un animal adoptado es visible y real, cada día.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RESPONSABILIDADES ─── -->
+<section id="responsabilidades" class="resp-section">
+  <span class="section-label">Antes de adoptar</span>
+  <h2 class="section-title">¿Estoy listo/a para adoptar?<br>Una guía honesta</h2>
+  <p class="section-sub">Adoptar es un compromiso de 10 a 18 años. Esta sección es para ayudarte a tomar la mejor decisión, con información real y sin romanticismos.</p>
+
+  <div class="resp-grid">
+    <div class="resp-col">
+      <h3>📋 Lo que necesitas tener</h3>
+      <div class="resp-item">
+        <div class="resp-icon">⏰</div>
+        <div class="resp-text">
+          <strong>Tiempo</strong>
+          <span>Perros: mínimo 2–3 horas de atención diaria + paseos. Gatos: más independientes, pero también necesitan interacción y estimulación.</span>
+        </div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-icon">🏠</div>
+        <div class="resp-text">
+          <strong>Espacio adaptado</strong>
+          <span>No necesitas un jardín enorme, pero sí un lugar seguro, sin riesgos de escape o tóxicos al alcance.</span>
+        </div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-icon">💰</div>
+        <div class="resp-text">
+          <strong>Presupuesto mensual</strong>
+          <span>Estima entre $800 y $2,500 MXN/mes (comida de calidad, antiparasitarios, consultas de rutina). Las emergencias médicas pueden costar más.</span>
+        </div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-icon">👨‍👩‍👧</div>
+        <div class="resp-text">
+          <strong>Acuerdo familiar</strong>
+          <span>Todos en el hogar deben estar de acuerdo. La mascota interactuará con todos, y todos deben participar en su cuidado.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="resp-col">
+      <h3>📅 Compromisos a largo plazo</h3>
+      <div class="resp-item">
+        <div class="resp-icon">💉</div>
+        <div class="resp-text">
+          <strong>Vacunas y veterinario</strong>
+          <span>Vacunación anual obligatoria (rabia, moquillo, parvovirus). Revisión veterinaria al menos una vez al año. Esterilización si no viene esterilizado/a.</span>
+        </div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-icon">🥣</div>
+        <div class="resp-text">
+          <strong>Alimentación de calidad</strong>
+          <span>La nutrición impacta directamente en su salud y longevidad. Investiga las opciones y elige una acorde a su tamaño y edad.</span>
+        </div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-icon">🐾</div>
+        <div class="resp-text">
+          <strong>Ejercicio y estimulación</strong>
+          <span>Paseos diarios (perros), juguetes y rascadores (gatos), interacción mental. Un animal aburrido puede desarrollar problemas de conducta.</span>
+        </div>
+      </div>
+      <div class="resp-item">
+        <div class="resp-icon">✈️</div>
+        <div class="resp-text">
+          <strong>Planeación de viajes</strong>
+          <span>¿Qué pasa cuando viajes? Necesitas una red de apoyo: familiar, amigo o servicio de cuidado de confianza.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MUROS INTERACTIVOS ─── -->
+<section class="walls-section" id="muros">
+  <span class="section-label">Comunidad</span>
+  <h2 class="section-title">Únete al muro<br>de adopciones</h2>
+  <p class="section-sub">Publica un animal que necesita hogar o comparte tu historia de adopción exitosa para inspirar a otros.</p>
+
+  <div class="walls-tabs">
+    <button class="wall-tab active" onclick="switchTab('buscan')">🐾 Buscan Hogar</button>
+    <button class="wall-tab" onclick="switchTab('exitosos')">🏠 Finales Felices</button>
+    <button class="wall-tab" onclick="switchTab('publicar')">+ Publicar</button>
+  </div>
+
+  <!-- Panel: Buscan Hogar -->
+  <div class="wall-panel active" id="panel-buscan">
+    <div class="animal-grid" id="grid-buscan"></div>
+    <div class="empty-state" id="empty-buscan" style="display:none;">
+      <div class="icon">🐾</div>
+      <p>Aún no hay publicaciones.<br>¡Sé el primero en publicar un animal que busca hogar!</p>
+      <button class="btn-primary" style="margin-top:1.2rem;" onclick="switchTabByName('publicar')">Publicar un animal</button>
+    </div>
+  </div>
+
+  <!-- Panel: Finales Felices -->
+  <div class="wall-panel" id="panel-exitosos">
+    <div class="success-grid" id="grid-exitosos"></div>
+    <div class="empty-state" id="empty-exitosos" style="display:none;">
+      <div class="icon">🏠</div>
+      <p>Aún no hay historias publicadas.<br>¿Ya adoptaste? ¡Inspira a otros compartiendo tu final feliz!</p>
+      <button class="btn-primary" style="margin-top:1.2rem;" onclick="switchTabByName('publicar')">Compartir mi historia</button>
+    </div>
+  </div>
+
+  <!-- Panel: Publicar -->
+  <div class="wall-panel" id="panel-publicar">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+
+      <!-- Formulario: Animal en adopción -->
+      <div class="upload-form">
+        <h3>🐾 Publica un animal</h3>
+        <p>¿Rescataste un animal que necesita hogar? Cuéntanos sobre él o ella.</p>
+
+        <div class="form-group">
+          <label>Nombre del animal y especie</label>
+          <input type="text" id="adopt-name" placeholder="Ej: Max, perro mestizo de 2 años">
+        </div>
+        <div class="form-group">
+          <label>Ubicación (ciudad / alcaldía)</label>
+          <input type="text" id="adopt-location" placeholder="Ej: Ecatepec, Estado de México">
+        </div>
+        <div class="form-group">
+          <label>Número de contacto (WhatsApp o llamada)</label>
+          <input type="tel" id="adopt-phone" placeholder="Ej: 55 1234 5678" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label>Descripción: carácter, necesidades, salud</label>
+          <textarea id="adopt-desc" placeholder="Cuéntanos todo: si está esterilizado/a, sus vacunas, cómo es con niños, otros animales, etc."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Foto del animal</label>
+          <div class="file-upload-area" id="adopt-drop">
+            <input type="file" accept="image/*" id="adopt-photo" onchange="previewImage(this,'adopt-preview')">
+            <div class="file-upload-icon">📷</div>
+            <p>Toca aquí o arrastra una foto</p>
+          </div>
+          <div class="file-preview" id="adopt-preview"><img src="" alt="Vista previa"></div>
+        </div>
+        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitAnimal()">Publicar en el muro</button>
+      </div>
+
+      <!-- Formulario: Final feliz -->
+      <div class="upload-form">
+        <h3>🏠 Comparte tu final feliz</h3>
+        <p>¿Adoptaste a alguien? Tu historia inspira a otros a dar el paso.</p>
+
+        <div class="form-group">
+          <label>Nombre de tu mascota</label>
+          <input type="text" id="success-name" placeholder="Ej: Luna">
+        </div>
+        <div class="form-group">
+          <label>Ciudad de adopción</label>
+          <input type="text" id="success-city" placeholder="Ej: Ciudad de México">
+        </div>
+        <div class="form-group">
+          <label>Tu mensaje de inspiración</label>
+          <textarea id="success-msg" placeholder="¿Cómo cambió tu vida adoptar? ¿Qué le dirías a alguien que duda?"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Foto de tu mascota (ya en casa)</label>
+          <div class="file-upload-area" id="success-drop">
+            <input type="file" accept="image/*" id="success-photo" onchange="previewImage(this,'success-preview')">
+            <div class="file-upload-icon">🏡</div>
+            <p>Comparte un momento feliz</p>
+          </div>
+          <div class="file-preview" id="success-preview"><img src="" alt="Vista previa"></div>
+        </div>
+        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="submitSuccess()">Publicar mi historia</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">🐾 Patitas con Hogar</div>
+      <p>Una iniciativa ciudadana para reducir el abandono animal en México a través de la concientización, la adopción responsable y la comunidad.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#adoptar-vs-comprar">Adoptar vs. Comprar</a></li>
+        <li><a href="#estadisticas">Estadísticas en México</a></li>
+        <li><a href="#beneficios">Beneficios</a></li>
+        <li><a href="#responsabilidades">Preparación</a></li>
+        <li><a href="#muros">Muro de adopciones</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Recursos útiles</h4>
+      <ul>
+        <li><a href="https://www.inegi.org.mx" target="_blank">INEGI</a></li>
+        <li><a href="https://www.gob.mx/senasica" target="_blank">SENASICA</a></li>
+        <li><a href="https://www.animanaturalis.org/mexico" target="_blank">AnimaNaturalis México</a></li>
+        <li><a href="https://www.hsus.org" target="_blank">HSUS (bienestar animal)</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Patitas con Hogar. Hecho con ❤️ por y para México.</p>
+    <p>Estadísticas basadas en datos del <a href="https://www.inegi.org.mx">INEGI</a>, AMVAC y OPS/OMS.</p>
+  </div>
+</footer>
+
+<!-- ─── CONFIRM DIALOG ─── -->
+<div class="confirm-backdrop" id="confirmBackdrop">
+  <div class="confirm-box">
+    <div class="icon">🗑️</div>
+    <h4 id="confirmTitle">¿Eliminar publicación?</h4>
+    <p id="confirmMsg">Esta acción no se puede deshacer.</p>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-confirm-delete" id="confirmBtn">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOAST ─── -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── NAV HAMBURGER ──
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+// ── SCROLL PROGRESS ──
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('scrollProgress').style.width = pct + '%';
+});
+
+// ── TABS ──
+function switchTab(tab) {
+  document.querySelectorAll('.wall-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.wall-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function switchTabByName(tab) {
+  document.querySelectorAll('.wall-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.wall-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  const tabs = { buscan: 0, exitosos: 1, publicar: 2 };
+  document.querySelectorAll('.wall-tab')[tabs[tab]].classList.add('active');
+}
+
+// ── PREVIEW DE IMAGEN ──
+function previewImage(input, previewId) {
+  const preview = document.getElementById(previewId);
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.style.display = 'block';
+      preview.querySelector('img').src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ── TOAST ──
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── BD LOCAL ──
+function getDB(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
+}
+function saveDB(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// ── CONFIRM DIALOG ──
+let pendingDeleteFn = null;
+
+function openConfirm(title, msg, onConfirm) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMsg').textContent = msg;
+  pendingDeleteFn = onConfirm;
+  document.getElementById('confirmBackdrop').classList.add('open');
+}
+
+function closeConfirm() {
+  document.getElementById('confirmBackdrop').classList.remove('open');
+  pendingDeleteFn = null;
+}
+
+document.getElementById('confirmBtn').addEventListener('click', () => {
+  if (pendingDeleteFn) pendingDeleteFn();
+  closeConfirm();
+});
+
+document.getElementById('confirmBackdrop').addEventListener('click', function(e) {
+  if (e.target === this) closeConfirm();
+});
+
+// ── ELIMINAR ANIMAL ──
+function deleteAnimal(ts) {
+  openConfirm(
+    '¿Eliminar esta publicación?',
+    'Puedes hacerlo porque el animal ya fue adoptado o ya no necesitas la publicación.',
+    () => {
+      let animals = getDB('patitas_adopt');
+      animals = animals.filter(a => a.ts !== ts);
+      saveDB('patitas_adopt', animals);
+      renderAnimals();
+      showToast('Publicación eliminada. ¡Gracias por mantener el muro actualizado! 🐾');
+    }
+  );
+}
+
+// ── ELIMINAR HISTORIA EXITOSA ──
+function deleteSuccess(ts) {
+  openConfirm(
+    '¿Eliminar esta historia?',
+    'Se eliminará del muro de finales felices.',
+    () => {
+      let stories = getDB('patitas_success');
+      stories = stories.filter(s => s.ts !== ts);
+      saveDB('patitas_success', stories);
+      renderSuccess();
+      showToast('Historia eliminada.');
+    }
+  );
+}
+
+// ── PUBLICAR ANIMAL ──
+function submitAnimal() {
+  const name = document.getElementById('adopt-name').value.trim();
+  const loc = document.getElementById('adopt-location').value.trim();
+  const phone = document.getElementById('adopt-phone').value.trim();
+  const desc = document.getElementById('adopt-desc').value.trim();
+  const previewEl = document.querySelector('#adopt-preview img');
+  const photoSrc = previewEl ? previewEl.src : '';
+
+  if (!name || !loc || !phone || !desc) {
+    showToast('Por favor completa todos los campos, incluyendo el teléfono.', 'error'); return;
+  }
+
+  const animals = getDB('patitas_adopt');
+  const ts = Date.now();
+  animals.unshift({ name, loc, phone, desc, photo: photoSrc, ts });
+  saveDB('patitas_adopt', animals);
+  renderAnimals();
+
+  document.getElementById('adopt-name').value = '';
+  document.getElementById('adopt-location').value = '';
+  document.getElementById('adopt-phone').value = '';
+  document.getElementById('adopt-desc').value = '';
+  document.getElementById('adopt-preview').style.display = 'none';
+  document.getElementById('adopt-photo').value = '';
+
+  showToast('¡Publicado! El animal ya aparece en el muro. 🐾');
+  switchTabByName('buscan');
+}
+
+// ── PUBLICAR HISTORIA EXITOSA ──
+function submitSuccess() {
+  const name = document.getElementById('success-name').value.trim();
+  const city = document.getElementById('success-city').value.trim();
+  const msg = document.getElementById('success-msg').value.trim();
+  const previewEl = document.querySelector('#success-preview img');
+  const photoSrc = previewEl ? previewEl.src : '';
+
+  if (!name || !city) {
+    showToast('Por favor completa nombre y ciudad.', 'error'); return;
+  }
+
+  const stories = getDB('patitas_success');
+  const ts = Date.now();
+  stories.unshift({ name, city, msg, photo: photoSrc, ts });
+  saveDB('patitas_success', stories);
+  renderSuccess();
+
+  document.getElementById('success-name').value = '';
+  document.getElementById('success-city').value = '';
+  document.getElementById('success-msg').value = '';
+  document.getElementById('success-preview').style.display = 'none';
+  document.getElementById('success-photo').value = '';
+
+  showToast('¡Historia publicada! Gracias por inspirar a otros. 🏠');
+  switchTabByName('exitosos');
+}
+
+// ── RENDERIZAR ANIMALES ──
+function renderAnimals() {
+  const animals = getDB('patitas_adopt');
+  const grid = document.getElementById('grid-buscan');
+  const empty = document.getElementById('empty-buscan');
+  grid.innerHTML = '';
+
+  if (!animals.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  animals.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'animal-card';
+    card.innerHTML = `
+      ${a.photo && a.photo.length > 10
+        ? `<img src="${a.photo}" alt="${a.name}" style="width:100%;height:200px;object-fit:cover;">`
+        : `<div style="height:120px;background:var(--terracota-light);display:flex;align-items:center;justify-content:center;font-size:3rem;">🐾</div>`}
+      <div class="animal-card-body">
+        <span class="animal-badge badge-busca">Busca hogar</span>
+        <h4>${a.name}</h4>
+        <div class="animal-location">📍 ${a.loc}</div>
+        ${a.phone ? `<div class="animal-phone">📞 ${a.phone}</div>` : ''}
+        <p class="animal-desc">${a.desc}</p>
+        <div class="animal-card-footer">
+          <a href="https://wa.me/52${a.phone ? a.phone.replace(/\D/g,'') : ''}" target="_blank" style="font-size:0.8rem;font-weight:600;color:var(--menta);display:flex;align-items:center;gap:4px;" ${!a.phone ? 'style="display:none"' : ''}>
+            💬 Contactar por WhatsApp
+          </a>
+          <button class="btn-delete" onclick="deleteAnimal(${a.ts})">🗑 Eliminar publicación</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── RENDERIZAR HISTORIAS ──
+function renderSuccess() {
+  const stories = getDB('patitas_success');
+  const grid = document.getElementById('grid-exitosos');
+  const empty = document.getElementById('empty-exitosos');
+  grid.innerHTML = '';
+
+  if (!stories.length) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  stories.forEach(s => {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:relative;';
+
+    const card = document.createElement('div');
+    card.className = 'success-card';
+    card.innerHTML = `
+      ${s.photo && s.photo.length > 10
+        ? `<img src="${s.photo}" alt="${s.name}">`
+        : `<div style="width:100%;aspect-ratio:1;background:var(--menta-light);display:flex;align-items:center;justify-content:center;font-size:3rem;">🏡</div>`}
+      <div class="success-card-overlay">
+        <h4>${s.name} · ${s.city}</h4>
+        <p>${s.msg ? s.msg.substring(0, 60) + (s.msg.length > 60 ? '…' : '') : ''}</p>
+      </div>`;
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn-delete';
+    delBtn.style.cssText = 'position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.92);border-color:rgba(196,98,58,0.5);z-index:2;';
+    delBtn.innerHTML = '🗑 Eliminar';
+    delBtn.onclick = () => deleteSuccess(s.ts);
+
+    wrapper.appendChild(card);
+    wrapper.appendChild(delBtn);
+    grid.appendChild(wrapper);
+  });
+}
+
+// Al cargar
+renderAnimals();
+renderSuccess();
+</script>
+
+</body>
+</html>
