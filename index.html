@@ -1576,7 +1576,13 @@
 <!-- ─── TOAST ─── -->
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ── SUPABASE ──
+const SUPABASE_URL = 'https://cneevdmjiluclsyzymph.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuZWV2ZG1qaWx1Y2xzeXp5bXBoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY4MjgsImV4cCI6MjA5MjkxMjgyOH0.bS6FxhcrXnocywFNz9abUQZ3fRv_IpAN9ojCQAjFHWU';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 // ── NAV HAMBURGER ──
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
@@ -1628,14 +1634,6 @@ function showToast(msg, type = 'success') {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 
-// ── BD LOCAL ──
-function getDB(key) {
-  try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; }
-}
-function saveDB(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
-}
-
 // ── CONFIRM DIALOG ──
 let pendingDeleteFn = null;
 
@@ -1660,164 +1658,192 @@ document.getElementById('confirmBackdrop').addEventListener('click', function(e)
   if (e.target === this) closeConfirm();
 });
 
-// ── ELIMINAR ANIMAL ──
-function deleteAnimal(ts) {
-  openConfirm(
-    '¿Eliminar esta publicación?',
-    'Puedes hacerlo porque el animal ya fue adoptado o ya no necesitas la publicación.',
-    () => {
-      let animals = getDB('patitas_adopt');
-      animals = animals.filter(a => a.ts !== ts);
-      saveDB('patitas_adopt', animals);
-      renderAnimals();
-      showToast('Publicación eliminada. ¡Gracias por mantener el muro actualizado! 🐾');
-    }
-  );
-}
-
-// ── ELIMINAR HISTORIA EXITOSA ──
-function deleteSuccess(ts) {
-  openConfirm(
-    '¿Eliminar esta historia?',
-    'Se eliminará del muro de finales felices.',
-    () => {
-      let stories = getDB('patitas_success');
-      stories = stories.filter(s => s.ts !== ts);
-      saveDB('patitas_success', stories);
-      renderSuccess();
-      showToast('Historia eliminada.');
-    }
-  );
+// ── IMAGEN A BASE64 ──
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = () => rej(new Error('Error al leer imagen'));
+    r.readAsDataURL(file);
+  });
 }
 
 // ── PUBLICAR ANIMAL ──
-function submitAnimal() {
+async function submitAnimal() {
   const name = document.getElementById('adopt-name').value.trim();
   const loc = document.getElementById('adopt-location').value.trim();
   const phone = document.getElementById('adopt-phone').value.trim();
   const desc = document.getElementById('adopt-desc').value.trim();
-  const previewEl = document.querySelector('#adopt-preview img');
-  const photoSrc = previewEl ? previewEl.src : '';
+  const fileInput = document.getElementById('adopt-photo');
 
   if (!name || !loc || !phone || !desc) {
     showToast('Por favor completa todos los campos, incluyendo el teléfono.', 'error'); return;
   }
 
-  const animals = getDB('patitas_adopt');
+  showToast('Publicando…');
+
+  let foto_url = '';
+  if (fileInput.files && fileInput.files[0]) {
+    foto_url = await fileToBase64(fileInput.files[0]);
+  }
+
   const ts = Date.now();
-  animals.unshift({ name, loc, phone, desc, photo: photoSrc, ts });
-  saveDB('patitas_adopt', animals);
-  renderAnimals();
+  const { error } = await sb.from('animales').insert([{
+    nombre: name, ubicacion: loc, telefono: phone,
+    descripcion: desc, foto_url, tipo: 'adopcion', ts
+  }]);
+
+  if (error) { showToast('Error al publicar: ' + error.message, 'error'); return; }
 
   document.getElementById('adopt-name').value = '';
   document.getElementById('adopt-location').value = '';
   document.getElementById('adopt-phone').value = '';
   document.getElementById('adopt-desc').value = '';
   document.getElementById('adopt-preview').style.display = 'none';
-  document.getElementById('adopt-photo').value = '';
+  fileInput.value = '';
 
   showToast('¡Publicado! El animal ya aparece en el muro. 🐾');
+  await loadAnimals();
   switchTabByName('buscan');
 }
 
 // ── PUBLICAR HISTORIA EXITOSA ──
-function submitSuccess() {
+async function submitSuccess() {
   const name = document.getElementById('success-name').value.trim();
   const city = document.getElementById('success-city').value.trim();
   const msg = document.getElementById('success-msg').value.trim();
-  const previewEl = document.querySelector('#success-preview img');
-  const photoSrc = previewEl ? previewEl.src : '';
+  const fileInput = document.getElementById('success-photo');
 
   if (!name || !city) {
     showToast('Por favor completa nombre y ciudad.', 'error'); return;
   }
 
-  const stories = getDB('patitas_success');
+  showToast('Publicando…');
+
+  let foto_url = '';
+  if (fileInput.files && fileInput.files[0]) {
+    foto_url = await fileToBase64(fileInput.files[0]);
+  }
+
   const ts = Date.now();
-  stories.unshift({ name, city, msg, photo: photoSrc, ts });
-  saveDB('patitas_success', stories);
-  renderSuccess();
+  const { error } = await sb.from('animales').insert([{
+    nombre: name, ciudad: city, mensaje: msg,
+    foto_url, tipo: 'exito', ts
+  }]);
+
+  if (error) { showToast('Error al publicar: ' + error.message, 'error'); return; }
 
   document.getElementById('success-name').value = '';
   document.getElementById('success-city').value = '';
   document.getElementById('success-msg').value = '';
   document.getElementById('success-preview').style.display = 'none';
-  document.getElementById('success-photo').value = '';
+  fileInput.value = '';
 
   showToast('¡Historia publicada! Gracias por inspirar a otros. 🏠');
+  await loadSuccess();
   switchTabByName('exitosos');
 }
 
-// ── RENDERIZAR ANIMALES ──
-function renderAnimals() {
-  const animals = getDB('patitas_adopt');
+// ── ELIMINAR ANIMAL ──
+function deleteAnimal(id) {
+  openConfirm(
+    '¿Eliminar esta publicación?',
+    'Puedes hacerlo porque el animal ya fue adoptado o ya no necesitas la publicación.',
+    async () => {
+      const { error } = await sb.from('animales').delete().eq('id', id);
+      if (error) { showToast('Error al eliminar.', 'error'); return; }
+      showToast('Publicación eliminada. ¡Gracias por mantener el muro actualizado! 🐾');
+      await loadAnimals();
+    }
+  );
+}
+
+// ── ELIMINAR HISTORIA ──
+function deleteSuccess(id) {
+  openConfirm(
+    '¿Eliminar esta historia?',
+    'Se eliminará del muro de finales felices.',
+    async () => {
+      const { error } = await sb.from('animales').delete().eq('id', id);
+      if (error) { showToast('Error al eliminar.', 'error'); return; }
+      showToast('Historia eliminada.');
+      await loadSuccess();
+    }
+  );
+}
+
+// ── CARGAR Y RENDERIZAR ANIMALES ──
+async function loadAnimals() {
   const grid = document.getElementById('grid-buscan');
   const empty = document.getElementById('empty-buscan');
-  grid.innerHTML = '';
+  grid.innerHTML = '<p style="color:var(--gris-calido);font-size:0.9rem;padding:1rem;">Cargando…</p>';
 
-  if (!animals.length) {
-    empty.style.display = 'block';
-    return;
+  const { data, error } = await sb.from('animales')
+    .select('*').eq('tipo', 'adopcion').order('created_at', { ascending: false });
+
+  grid.innerHTML = '';
+  if (error || !data || !data.length) {
+    empty.style.display = 'block'; return;
   }
   empty.style.display = 'none';
 
-  animals.forEach(a => {
+  data.forEach(a => {
     const card = document.createElement('div');
     card.className = 'animal-card';
     card.innerHTML = `
-      ${a.photo && a.photo.length > 10
-        ? `<img src="${a.photo}" alt="${a.name}" style="width:100%;height:200px;object-fit:cover;">`
+      ${a.foto_url && a.foto_url.length > 10
+        ? `<img src="${a.foto_url}" alt="${a.nombre}" style="width:100%;height:200px;object-fit:cover;">`
         : `<div style="height:120px;background:var(--terracota-light);display:flex;align-items:center;justify-content:center;font-size:3rem;">🐾</div>`}
       <div class="animal-card-body">
         <span class="animal-badge badge-busca">Busca hogar</span>
-        <h4>${a.name}</h4>
-        <div class="animal-location">📍 ${a.loc}</div>
-        ${a.phone ? `<div class="animal-phone">📞 ${a.phone}</div>` : ''}
-        <p class="animal-desc">${a.desc}</p>
+        <h4>${a.nombre}</h4>
+        <div class="animal-location">📍 ${a.ubicacion}</div>
+        ${a.telefono ? `<div class="animal-phone">📞 ${a.telefono}</div>` : ''}
+        <p class="animal-desc">${a.descripcion || ''}</p>
         <div class="animal-card-footer">
-          <a href="https://wa.me/52${a.phone ? a.phone.replace(/\D/g,'') : ''}" target="_blank" style="font-size:0.8rem;font-weight:600;color:var(--menta);display:flex;align-items:center;gap:4px;" ${!a.phone ? 'style="display:none"' : ''}>
-            💬 Contactar por WhatsApp
-          </a>
-          <button class="btn-delete" onclick="deleteAnimal(${a.ts})">🗑 Eliminar publicación</button>
+          ${a.telefono ? `<a href="https://wa.me/52${a.telefono.replace(/\D/g,'')}" target="_blank" style="font-size:0.8rem;font-weight:600;color:var(--menta);display:flex;align-items:center;gap:4px;">💬 Contactar por WhatsApp</a>` : '<span></span>'}
+          <button class="btn-delete" onclick="deleteAnimal('${a.id}')">🗑 Eliminar</button>
         </div>
       </div>`;
     grid.appendChild(card);
   });
 }
 
-// ── RENDERIZAR HISTORIAS ──
-function renderSuccess() {
-  const stories = getDB('patitas_success');
+// ── CARGAR Y RENDERIZAR HISTORIAS ──
+async function loadSuccess() {
   const grid = document.getElementById('grid-exitosos');
   const empty = document.getElementById('empty-exitosos');
-  grid.innerHTML = '';
+  grid.innerHTML = '<p style="color:var(--gris-calido);font-size:0.9rem;padding:1rem;">Cargando…</p>';
 
-  if (!stories.length) {
-    empty.style.display = 'block';
-    return;
+  const { data, error } = await sb.from('animales')
+    .select('*').eq('tipo', 'exito').order('created_at', { ascending: false });
+
+  grid.innerHTML = '';
+  if (error || !data || !data.length) {
+    empty.style.display = 'block'; return;
   }
   empty.style.display = 'none';
 
-  stories.forEach(s => {
+  data.forEach(s => {
     const wrapper = document.createElement('div');
     wrapper.style.cssText = 'position:relative;';
 
     const card = document.createElement('div');
     card.className = 'success-card';
     card.innerHTML = `
-      ${s.photo && s.photo.length > 10
-        ? `<img src="${s.photo}" alt="${s.name}">`
+      ${s.foto_url && s.foto_url.length > 10
+        ? `<img src="${s.foto_url}" alt="${s.nombre}">`
         : `<div style="width:100%;aspect-ratio:1;background:var(--menta-light);display:flex;align-items:center;justify-content:center;font-size:3rem;">🏡</div>`}
       <div class="success-card-overlay">
-        <h4>${s.name} · ${s.city}</h4>
-        <p>${s.msg ? s.msg.substring(0, 60) + (s.msg.length > 60 ? '…' : '') : ''}</p>
+        <h4>${s.nombre} · ${s.ciudad || ''}</h4>
+        <p>${s.mensaje ? s.mensaje.substring(0, 60) + (s.mensaje.length > 60 ? '…' : '') : ''}</p>
       </div>`;
 
     const delBtn = document.createElement('button');
     delBtn.className = 'btn-delete';
     delBtn.style.cssText = 'position:absolute;top:8px;right:8px;background:rgba(255,255,255,0.92);border-color:rgba(196,98,58,0.5);z-index:2;';
     delBtn.innerHTML = '🗑 Eliminar';
-    delBtn.onclick = () => deleteSuccess(s.ts);
+    delBtn.onclick = () => deleteSuccess(s.id);
 
     wrapper.appendChild(card);
     wrapper.appendChild(delBtn);
@@ -1825,9 +1851,9 @@ function renderSuccess() {
   });
 }
 
-// Al cargar
-renderAnimals();
-renderSuccess();
+// ── INICIO ──
+loadAnimals();
+loadSuccess();
 </script>
 
 </body>
