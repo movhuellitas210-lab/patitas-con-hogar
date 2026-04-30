@@ -1504,7 +1504,7 @@
           <input type="text" id="success-name" placeholder="Ej: Luna">
         </div>
         <div class="form-group">
-          <label>Ciudad de adopción</label>
+          <label>Ciudad de adopción <span style="font-weight:400;color:var(--gris-calido);font-size:0.8rem;">(opcional)</span></label>
           <input type="text" id="success-city" placeholder="Ej: Ciudad de México">
         </div>
         <div class="form-group">
@@ -1570,7 +1570,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Patitas con Hogar. Hecho con ❤️ por y para México.</p>
+    <p>© 2026 Patitas con Hogar. Hecho con ❤️ por y para México.</p>
     <p>Estadísticas basadas en datos del <a href="https://www.inegi.org.mx">INEGI</a>, AMVAC y OPS/OMS.</p>
   </div>
 </footer>
@@ -1729,7 +1729,7 @@ async function submitSuccess() {
   const msg = document.getElementById('success-msg').value.trim();
   const fileInput = document.getElementById('success-photo');
 
-  if (!name || !city) {
+  if (!name) {
     showToast('Por favor completa nombre y ciudad.', 'error'); return;
   }
 
