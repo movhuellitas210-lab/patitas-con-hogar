@@ -1166,7 +1166,6 @@
 
   .modal-close:hover { background: var(--terracota-light); }
 
-  /* scroll suave al nav */
   .scroll-progress {
     position: fixed;
     top: 68px; left: 0;
@@ -1432,9 +1431,9 @@
   <p class="section-sub">Publica un animal que necesita hogar o comparte tu historia de adopción exitosa para inspirar a otros.</p>
 
   <div class="walls-tabs">
-    <button class="wall-tab active" onclick="switchTab('buscan')">🐾 Buscan Hogar</button>
-    <button class="wall-tab" onclick="switchTab('exitosos')">🏠 Finales Felices</button>
-    <button class="wall-tab" onclick="switchTab('publicar')">+ Publicar</button>
+    <button class="wall-tab active" onclick="switchTab('buscan', this)">🐾 Buscan Hogar</button>
+    <button class="wall-tab" onclick="switchTab('exitosos', this)">🏠 Finales Felices</button>
+    <button class="wall-tab" onclick="switchTab('publicar', this)">+ Publicar</button>
   </div>
 
   <!-- Panel: Buscan Hogar -->
@@ -1591,7 +1590,8 @@
 <!-- ─── TOAST ─── -->
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- ✅ FIX 2: CDN cambiado a versión UMD para evitar "Unexpected token 'export'" -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 // ── SUPABASE ──
 const SUPABASE_URL = 'https://cneevdmjiluclsyzymph.supabase.co';
@@ -1613,11 +1613,11 @@ window.addEventListener('scroll', () => {
 });
 
 // ── TABS ──
-function switchTab(tab) {
+function switchTab(tab, btn) {
   document.querySelectorAll('.wall-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.wall-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + tab).classList.add('active');
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 function switchTabByName(tab) {
@@ -1685,14 +1685,15 @@ function fileToBase64(file) {
 
 // ── PUBLICAR ANIMAL ──
 async function submitAnimal() {
-  const name = document.getElementById('adopt-name').value.trim();
-  const loc = document.getElementById('adopt-location').value.trim();
-  const phone = document.getElementById('adopt-phone').value.trim();
-  const desc = document.getElementById('adopt-desc').value.trim();
+  const name     = document.getElementById('adopt-name').value.trim();
+  const loc      = document.getElementById('adopt-location').value.trim();
+  const phone    = document.getElementById('adopt-phone').value.trim();
+  const desc     = document.getElementById('adopt-desc').value.trim();
   const fileInput = document.getElementById('adopt-photo');
 
   if (!name || !loc || !phone || !desc) {
-    showToast('Por favor completa todos los campos, incluyendo el teléfono.', 'error'); return;
+    showToast('Por favor completa todos los campos, incluyendo el teléfono.', 'error');
+    return;
   }
 
   showToast('Publicando…');
@@ -1704,8 +1705,13 @@ async function submitAnimal() {
 
   const ts = Date.now();
   const { error } = await sb.from('animales').insert([{
-    nombre: name, ubicacion: loc, telefono: phone,
-    descripcion: desc, foto_url, tipo: 'adopcion', ts
+    nombre:      name,
+    ubicacion:   loc,       // campo requerido NOT NULL
+    telefono:    phone,
+    descripcion: desc,
+    foto_url,
+    tipo:        'adopcion',
+    ts
   }]);
 
   if (error) { showToast('Error al publicar: ' + error.message, 'error'); return; }
@@ -1724,13 +1730,14 @@ async function submitAnimal() {
 
 // ── PUBLICAR HISTORIA EXITOSA ──
 async function submitSuccess() {
-  const name = document.getElementById('success-name').value.trim();
-  const city = document.getElementById('success-city').value.trim();
-  const msg = document.getElementById('success-msg').value.trim();
+  const name      = document.getElementById('success-name').value.trim();
+  const city      = document.getElementById('success-city').value.trim();
+  const msg       = document.getElementById('success-msg').value.trim();
   const fileInput = document.getElementById('success-photo');
 
   if (!name) {
-    showToast('Por favor completa nombre y ciudad.', 'error'); return;
+    showToast('Por favor ingresa al menos el nombre de tu mascota.', 'error');
+    return;
   }
 
   showToast('Publicando…');
@@ -1741,9 +1748,17 @@ async function submitSuccess() {
   }
 
   const ts = Date.now();
+
+  // ✅ FIX 1: se agrega "ubicacion" usando city (o valor por defecto)
+  //    para cumplir la restricción NOT NULL de la tabla
   const { error } = await sb.from('animales').insert([{
-    nombre: name, ciudad: city, mensaje: msg,
-    foto_url, tipo: 'exito', ts
+    nombre:    name,
+    ubicacion: city || 'No especificada',   // ← CORRECCIÓN PRINCIPAL
+    ciudad:    city,
+    mensaje:   msg,
+    foto_url,
+    tipo:      'exito',
+    ts
   }]);
 
   if (error) { showToast('Error al publicar: ' + error.message, 'error'); return; }
@@ -1789,16 +1804,20 @@ function deleteSuccess(id) {
 
 // ── CARGAR Y RENDERIZAR ANIMALES ──
 async function loadAnimals() {
-  const grid = document.getElementById('grid-buscan');
+  const grid  = document.getElementById('grid-buscan');
   const empty = document.getElementById('empty-buscan');
   grid.innerHTML = '<p style="color:var(--gris-calido);font-size:0.9rem;padding:1rem;">Cargando…</p>';
 
-  const { data, error } = await sb.from('animales')
-    .select('*').eq('tipo', 'adopcion').order('created_at', { ascending: false });
+  const { data, error } = await sb
+    .from('animales')
+    .select('*')
+    .eq('tipo', 'adopcion')
+    .order('created_at', { ascending: false });
 
   grid.innerHTML = '';
   if (error || !data || !data.length) {
-    empty.style.display = 'block'; return;
+    empty.style.display = 'block';
+    return;
   }
   empty.style.display = 'none';
 
@@ -1816,7 +1835,12 @@ async function loadAnimals() {
         ${a.telefono ? `<div class="animal-phone">📞 ${a.telefono}</div>` : ''}
         <p class="animal-desc">${a.descripcion || ''}</p>
         <div class="animal-card-footer">
-          ${a.telefono ? `<a href="https://wa.me/52${a.telefono.replace(/\D/g,'')}" target="_blank" style="font-size:0.8rem;font-weight:600;color:var(--menta);display:flex;align-items:center;gap:4px;">💬 Contactar por WhatsApp</a>` : '<span></span>'}
+          ${a.telefono
+            ? `<a href="https://wa.me/52${a.telefono.replace(/\D/g,'')}" target="_blank"
+                 style="font-size:0.8rem;font-weight:600;color:var(--menta);display:flex;align-items:center;gap:4px;">
+                 💬 Contactar por WhatsApp
+               </a>`
+            : '<span></span>'}
           <button class="btn-delete" onclick="deleteAnimal('${a.id}')">🗑 Eliminar</button>
         </div>
       </div>`;
@@ -1826,16 +1850,20 @@ async function loadAnimals() {
 
 // ── CARGAR Y RENDERIZAR HISTORIAS ──
 async function loadSuccess() {
-  const grid = document.getElementById('grid-exitosos');
+  const grid  = document.getElementById('grid-exitosos');
   const empty = document.getElementById('empty-exitosos');
   grid.innerHTML = '<p style="color:var(--gris-calido);font-size:0.9rem;padding:1rem;">Cargando…</p>';
 
-  const { data, error } = await sb.from('animales')
-    .select('*').eq('tipo', 'exito').order('created_at', { ascending: false });
+  const { data, error } = await sb
+    .from('animales')
+    .select('*')
+    .eq('tipo', 'exito')
+    .order('created_at', { ascending: false });
 
   grid.innerHTML = '';
   if (error || !data || !data.length) {
-    empty.style.display = 'block'; return;
+    empty.style.display = 'block';
+    return;
   }
   empty.style.display = 'none';
 
@@ -1850,7 +1878,7 @@ async function loadSuccess() {
         ? `<img src="${s.foto_url}" alt="${s.nombre}">`
         : `<div style="width:100%;aspect-ratio:1;background:var(--menta-light);display:flex;align-items:center;justify-content:center;font-size:3rem;">🏡</div>`}
       <div class="success-card-overlay">
-        <h4>${s.nombre} · ${s.ciudad || ''}</h4>
+        <h4>${s.nombre}${s.ciudad ? ' · ' + s.ciudad : ''}</h4>
         <p>${s.mensaje ? s.mensaje.substring(0, 60) + (s.mensaje.length > 60 ? '…' : '') : ''}</p>
       </div>`;
 
